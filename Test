@@ -1,0 +1,10 @@
+[System.IO.File]::WriteAllText("D:\Компас\activate_kompas.ps1", '$Key = "OrjKBN-5bwTKo-Ts1NCu-wXUbWB-XfK4ZH"' + "`r`n" + @'
+$paths = @("C:\Program Files\ASCON\KOMPAS-3D V24","C:\Program Files (x86)\ASCON\KOMPAS-3D V24")
+$dir = $paths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $dir) { $dir = Read-Host "Enter KOMPAS install path" }
+Write-Host "Dir: $dir"
+$tool = Get-ChildItem $dir -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.Name -match "kActivat|Activat" -and $_.Extension -eq ".exe" } | Select-Object -First 1
+if ($tool) { Write-Host "Key: $Key"; Start-Process $tool.FullName -Wait }
+else { $exe = Get-ChildItem $dir -Filter "kompas*.exe" | Select-Object -First 1; if ($exe) { Write-Host "Key: $Key"; Start-Process $exe.FullName } }
+Read-Host "Enter"
+'@, [System.Text.Encoding]::UTF8)
